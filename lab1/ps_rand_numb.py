@@ -1,4 +1,5 @@
 import random
+import lab1.lfsr
 
 
 class BuiitInGener():
@@ -34,11 +35,27 @@ class LemerGenerator():
         self.x = self.x if len(self.x) == 32 else '0'*(32 - len(self.x)) + self.x
 
 
+class L20Generator():
+    def __init__(self):
+        self.l1 = lab1.lfsr.LFSR([20, 17, 15, 11, 0])
+
+    def gener_bit(self):
+        return self.l1.step()
+
+    def gener_byte(self):
+        return [self.l1.step() for _ in range(8)]
+
 if __name__ == "__main__":
     temp = BuiitInGener()
     temp2 = LemerGenerator()
-    print(temp2.gener_last_byte())
-    print(temp2.gener_first_byte())
-    print(temp2.gener_first_byte())
+    temp3 = L20Generator()
+    # print(temp2.gener_last_byte())
+    # print(temp2.gener_first_byte())
+    # print(temp2.gener_first_byte())
     # print(temp.gener_bit())
     # print(temp.gener_byte())
+    print(temp3.l1.polyn)
+    print(temp3.l1.state)
+    print(temp3.gener_bit())
+    print(temp3.gener_byte())
+    print(temp3.l1.state)

@@ -117,5 +117,5 @@ class BBS(Generator):
         return self.r % 256
 
 if __name__ == "__main__":
-    q = BBS()
+    q = GeffeGen()
     print(q.genseq(5))

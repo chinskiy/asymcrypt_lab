@@ -1,5 +1,5 @@
 import random
-
+import os
 
 class Generator():
     def genseq(self, numb=1):
@@ -101,10 +101,12 @@ class GeffeGen(Generator):
 
 
 class Librarian(Generator):
+    def __init__(self):
+        self.f = open('kjv.txt')
+        self.f.seek(random.randint(1, 3000000))
+
     def getnext(self):
-        f = open('txt1')
-        f.seek(random.randint(1, 300000))
-        return ord(f.read(1)) % 2 ** 8
+        return ord(self.f.read(1)) % 2 ** 8
 
 
 class BBS(Generator):

@@ -1,24 +1,52 @@
 import lab1.ps_rand_numb as gen
 
-const = {'0.01': 2.327, '0.05': 1.645, '0.1': 1.281}
+
+def get_higr(l):
+    const, higr = {'0.01': 2.327, '0.05': 1.645, '0.1': 1.281}, []
+    for _ in const:
+        higr.append(((2 * l) ** 0.5) * const[_] + l)
+    higr.sort()
+    return higr
 
 
 def test1(arr):
-    hicv, hi21, n = 0, [], len(arr) / 2 ** 8
+    hicv, higr, n = 0, [], len(arr) / 2 ** 8
     for _ in range(256):
         hicv += ((arr.count(_) - n) ** 2) / n
-    for _ in const:
-        hi21.append((2 * 255) ** 1/2 * const[_] + 255)
-    print(round(hicv, 2), "  ", hi21[0], "  ", hi21[1], "  ",  hi21[2])
-    chk = 1
-    for elem in hi21:
+    higr = get_higr(255)
+    print(repr(round(hicv, 2)).ljust(15), end='')
+    for _ in range(3):
+        print(repr(round(higr[_], 2)).ljust(15), end='')
+    for elem in higr:
         if hicv > elem:
-            chk = 0
-            break
-    if chk == 1:
-        print("pass")
-    else:
-        print("error")
+            print("error")
+            return
+    print("pass")
+
+
+def test2(arr):
+    hicv, higr, n, nu, alpha = 0, [], len(arr) // 2, [0 for _ in range(2 ** 8)], [0 for _ in range(2 ** 8)]
+    nucv = [[0 for _ in range(2 ** 8)] for __ in range(2 ** 8)]
+    for _ in range(len(arr)):
+        if _ % 2 == 0:
+            nu[arr[_]] += 1
+            nucv[arr[_]][arr[_ + 1]] += 1
+        else:
+            alpha[arr[_]] += 1
+    for _ in range(2 ** 8):
+        for __ in range(2 ** 8):
+            if nu[_] and alpha[__] != 0:
+                hicv += nucv[_][__] ** 2/(nu[_] * alpha[__])
+    hicv = (hicv - 1) * n
+    higr = get_higr(255 ** 2)
+    print(repr(round(hicv, 2)).ljust(15), end='')
+    for _ in range(3):
+        print(repr(round(higr[_], 2)).ljust(15), end='')
+    for elem in higr:
+        if hicv > elem:
+            print("error")
+            return
+    print("pass")
 
 
 if __name__ == "__main__":
@@ -27,9 +55,11 @@ if __name__ == "__main__":
     st = ["Built in", "Lemer first bit", "Lemer last bit", "L20", "L89", "GeffeGen", "Librarian", "BBS"]
     randnumb = []
     for _ in range(len(g)):
-        randnumb.append(g[_].genseq(10000))
+        randnumb.append(g[_].genseq(100000))
     for _ in range(len(g)):
         print(st[_])
-        print("test 1")
+        print("test1: ", end='')
         test1(randnumb[_])
+        print("test2: ", end='')
+        test2(randnumb[_])
         print()

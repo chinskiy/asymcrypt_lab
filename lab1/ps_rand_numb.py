@@ -24,7 +24,7 @@ class LemerGenFirstBits(Generator):
 
     def getnext(self):
         self.x = (self.a * self.x + self.c) % self.m
-        return self.x % 256
+        return self.x % 2 ** 8
 
 
 class LemerGenLastBits(Generator):
@@ -115,7 +115,3 @@ class BBS(Generator):
     def getnext(self):
         self.r = (self.r ** 2) % self.numb
         return self.r % 256
-
-if __name__ == "__main__":
-    q = GeffeGen()
-    print(q.genseq(5))

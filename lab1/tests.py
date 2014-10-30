@@ -33,9 +33,6 @@ def test2(arr):
             nucv[arr[_]][arr[_ + 1]] += 1
         else:
             alpha[arr[_]] += 1
-    # print()
-    # print(nu)
-    # print(alpha)
     for _ in range(2 ** 8):
         for __ in range(2 ** 8):
             if (nu[_] != 0) and (alpha[__] != 0):
@@ -74,7 +71,6 @@ def test3(arr, r):
             print("error")
             return
     print("pass")
-
 
 
 if __name__ == "__main__":

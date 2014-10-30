@@ -1,5 +1,5 @@
 import random
-import os
+
 
 class Generator():
     def genseq(self, numb=1):
@@ -72,14 +72,14 @@ class L89Generator(Generator):
 
 
 class LFSR():
-    def __init__(self, polyn):
+    def __init__(self, polyn, lenp):
         self.polyn = polyn
-        self.state = [random.choice([0, 1]) for _ in range(len(polyn))]
+        self.state = [random.choice([0, 1]) for _ in range(lenp)]
 
     def step(self):
         numb = 0
-        for _ in range(len(self.polyn)):
-            if self.polyn[_] & self.state[_] == 1:
+        for _ in self.polyn:
+            if self.state[_] == 1:
                 numb ^= 1
         self.state.append(numb)
         return self.state.pop(0)
@@ -87,9 +87,9 @@ class LFSR():
 
 class GeffeGen(Generator):
     def __init__(self):
-        l1 = LFSR([1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        l2 = LFSR([1, 1, 0, 1, 1, 0, 0, 0, 0])
-        l3 = LFSR([1, 0, 0, 1, 0, 0, 0, 0, 0, 0])
+        l1 = LFSR([0, 2], 11)
+        l2 = LFSR([0, 1, 3, 4], 9)
+        l3 = LFSR([0, 3], 10)
         self.l1, self.l2, self.l3 = l1, l2, l3
 
     def getnext(self):
@@ -106,7 +106,7 @@ class Librarian(Generator):
         self.f.seek(random.randint(1, 3000000))
 
     def getnext(self):
-        return ord(self.f.read(1)) % 2 ** 8
+        return ord(self.f.read(1))
 
 
 class BBS(Generator):

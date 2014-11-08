@@ -8,6 +8,9 @@ class Generator():
             arr.append(self.getnext())
         return arr
 
+    def genseqbin(self, numb=1):
+        pass
+
     def getnext(self):
         pass
 
@@ -117,3 +120,11 @@ class BBS(Generator):
     def getnext(self):
         self.r = (self.r ** 2) % self.numb
         return self.r % 256
+
+    def genseqbin(self, numb=1):
+        seq = ""
+        for _ in range(numb // 8):
+            seq += str(bin(self.getnext()))[2:].zfill(8)
+        if numb % 8 != 0:
+            seq += str(bin(self.getnext()))[2:].zfill(8)[:numb % 8]
+        return seq

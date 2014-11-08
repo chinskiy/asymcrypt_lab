@@ -1,4 +1,5 @@
 import lab1.ps_rand_numb as gen
+import time
 
 
 def get_higr(l):
@@ -77,15 +78,15 @@ if __name__ == "__main__":
     g = [gen.BuiitInGener(), gen.LemerGenFirstBits(), gen.LemerGenLastBits(), gen.L20Generator(),
          gen.L89Generator(), gen.GeffeGen(), gen.Librarian(), gen.BBS()]
     st = ["Built in", "Lemer first bit", "Lemer last bit", "L20", "L89", "GeffeGen", "Librarian", "BBS"]
-    randnumb = []
     for _ in range(len(g)):
-        randnumb.append(g[_].genseq(100000))
-    for _ in range(len(g)):
+        t0 = time.time()
+        randnumb = g[_].genseq(100000)
         print(st[_])
         print("test1: ", end='')
-        test1(randnumb[_])
+        test1(randnumb)
         print("test2: ", end='')
-        test2(randnumb[_])
+        test2(randnumb)
         print("test3: ", end='')
-        test3(randnumb[_], 20)
+        test3(randnumb, 20)
+        print(time.time() - t0)
         print()

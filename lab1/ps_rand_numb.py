@@ -112,7 +112,20 @@ class Librarian(Generator):
         return ord(self.f.read(1))
 
 
-class BBS(Generator):
+class BBSbit(Generator):
+    def __init__(self):
+        self.numb = 0x5ABA02CC8F5C8E71DD2FE0F870C2CDDB77B4EC7 * 0x72AC531AC3A02B881DDF
+        self.r = random.randint(2, self.numb-1)
+
+    def getnext(self):
+        res = ''
+        for _ in range(8):
+            self.r = (self.r ** 2) % self.numb
+            res += str(self.r % 2)
+        return int(res, 2)
+
+
+class BBSbyte(Generator):
     def __init__(self):
         self.numb = 0x5ABA02CC8F5C8E71DD2FE0F870C2CDDB77B4EC7 * 0x72AC531AC3A02B881DDF
         self.r = random.randint(2, self.numb-1)

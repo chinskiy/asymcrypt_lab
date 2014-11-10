@@ -11,7 +11,7 @@ def gcd(a, b):
 
 def get_prime_number(length):
     while True:
-        numb = int(gener.BBS().genseqbin(length), 2)
+        numb = int(gener.BBSbyte().genseqbin(length), 2)
         if test_trial_divisions(numb) == 0:
             continue
         if mil_rab_test(numb, 20) == 0:
@@ -63,6 +63,12 @@ def fastpow(t, k, p):
     return res
 
 
+def pair_generator(leng):
+    p = get_prime_number(leng)
+    q = get_prime_number(leng)
+    return [p, q]
+
+
 if __name__ == "__main__":
-    q = get_prime_number(128)
-    print(hex(q))
+    q = pair_generator(256)
+    print(hex(q[0]))

@@ -76,8 +76,8 @@ def test3(arr, r):
 
 if __name__ == "__main__":
     g = [gen.BuiitInGener(), gen.LemerGenFirstBits(), gen.LemerGenLastBits(), gen.L20Generator(),
-         gen.L89Generator(), gen.GeffeGen(), gen.Librarian(), gen.BBS()]
-    st = ["Built in", "Lemer first bit", "Lemer last bit", "L20", "L89", "GeffeGen", "Librarian", "BBS"]
+         gen.L89Generator(), gen.GeffeGen(), gen.Librarian(), gen.BBSbit(), gen.BBSbyte()]
+    st = ["Built in", "Lemer first bit", "Lemer last bit", "L20", "L89", "GeffeGen", "Librarian", "BBSbit", "BBSbyte"]
     for _ in range(len(g)):
         t0 = time.time()
         randnumb = g[_].genseq(100000)

@@ -20,7 +20,7 @@ def egcd(a, b):
 def modinv(a, m):
     g, x, y = egcd(a, m)
     if g != 1:
-        raise Exception('modular inverse does not exist')
+        return 0
     else:
         return x % m
 
@@ -99,9 +99,79 @@ def gener_pq(leng):
 
 def build_rsa(leng):
     p, q = gener_pq(leng)
-    n, phi, e = p * q, (p - 1) * (q - 1), 2 ** 16 + 1
-    d = modinv(e, phi)
+    e = 2 ** 16 + 1
+    return dict(d=modinv(e, (p - 1) * (q - 1)), p=p, q=q, n=p * q, e=e)
 
+
+def encrypt_rsa(mes, e, n):
+    return fastpow(mes, e, n)
+
+
+def decrypt_rsa(c, d, n):
+    return fastpow(c, d, n)
+
+
+def check_rsa_encr_decr(par, mes):
+    print('p ', str(hex(par['p']))[2:])
+    print('q ', str(hex(par['q']))[2:])
+    print('n ', str(hex(par['n']))[2:])
+    print('e ', str(hex(par['e']))[2:])
+    print('d ', str(hex(par['d']))[2:])
+    print('m ', str(hex(mes))[2:])
+    cr = encrypt_rsa(m, par['e'], par['n'])
+    print('c', str(hex(cr))[2:])
+    mes = decrypt_rsa(cr, par['d'], par['n'])
+    print('m ', str(hex(mes))[2:])
+
+
+def create_rsa_sign(mes, d, n):
+    return mes, fastpow(mes, d, n)
+
+
+def check_rsa_sign(mes, s, e, n):
+    if mes == fastpow(s, e, n):
+        print('Correct')
+    return fastpow(s, e, n)
+
+
+def create_and_check_rsa_sign(par, mes):
+    print('n ', str(hex(par['n']))[2:])
+    print('e ', str(hex(par['e']))[2:])
+    print('d ', str(hex(par['d']))[2:])
+    print('m ', str(hex(mes))[2:])
+    s = create_rsa_sign(mes, par['d'], par['n'])
+    print('s', str(hex(s[1]))[2:])
+    mes = check_rsa_sign(s[0], s[1], par['e'], par['n'])
+    print('m ', str(hex(mes))[2:])
+
+
+def chech_protocol_conf_key_sending(a, b, k):
+    print('eA ', str(hex(a['e']))[2:])
+    print('nA ', str(hex(a['n']))[2:])
+    print('dA ', str(hex(a['d']))[2:])
+    print('eB ', str(hex(b['e']))[2:])
+    print('nB ', str(hex(b['n']))[2:])
+    print('dB ', str(hex(b['d']))[2:])
+    print('k  ', str(hex(k))[2:])
+    k1 = encrypt_rsa(k, b['e'], b['n'])
+    print('k1 ', str(hex(k1))[2:])
+    s = create_rsa_sign(k, a['d'], a['n'])
+    print('s ', str(hex(s[1]))[2:])
+    s1 = create_rsa_sign(s[1], b['e'], b['n'])
+    print('s1', str(hex(s1[1]))[2:])
+    print('Checking:')
+    k = decrypt_rsa(k1, b['d'], b['n'])
+    print('k ', str(hex(k))[2:])
+    s = decrypt_rsa(s1[1], b['d'], b['n'])
+    print('s ', str(hex(s))[2:])
+    k = check_rsa_sign(k, s, a['e'], a['n'])
+    print('k ', str(hex(k))[2:])
 
 if __name__ == "__main__":
-    build_rsa(256)
+    abon_a, abon_b = build_rsa(256), build_rsa(256)
+    if abon_a['p'] * abon_a['q'] > abon_b['p'] * abon_b['q']:
+        abon_a, abon_b = abon_b, abon_a
+    m = int(gener.BBSbyte().genseqbin(100), 2)
+    #check_rsa_encr_decr(abon_a, m)
+    #create_and_check_rsa_sign(abon_a, m)
+    chech_protocol_conf_key_sending(abon_a, abon_b, m)

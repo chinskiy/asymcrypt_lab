@@ -9,18 +9,32 @@ def gcd(a, b):
     return a
 
 
+def egcd(a, b):
+    if a == 0:
+        return b, 0, 1
+    else:
+        g, y, x = egcd(b % a, a)
+        return g, x - (b // a) * y, y
+
+
+def modinv(a, m):
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception('modular inverse does not exist')
+    else:
+        return x % m
+
+
 def get_prime_number(length):
     while True:
         numb = int(gener.BBSbyte().genseqbin(length), 2)
-        if test_trial_divisions(numb) == 0:
-            continue
-        if mil_rab_test(numb, 20) == 0:
+        if make_test(numb) == 0:
             continue
         return numb
 
 
 def test_trial_divisions(numb):
-    arr = [2, 3, 5, 7, 11, 13, 17, 19]
+    arr = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43]
     for _ in arr:
         if numb % _ == 0:
             return 0
@@ -28,7 +42,7 @@ def test_trial_divisions(numb):
 
 
 def mil_rab_test(p, k):
-    q, r = divmod(p - 1, 2)
+    q = (p - 1) // 2
     s, d = 1, q
     while True:
         q, r = divmod(q, 2)
@@ -51,6 +65,14 @@ def mil_rab_test(p, k):
         return 0
 
 
+def make_test(numb):
+    if test_trial_divisions(numb) == 0:
+        return 0
+    if mil_rab_test(numb, 15) == 0:
+        return 0
+    return 1
+
+
 def fastpow(t, k, p):
     res = 1
     while k:
@@ -63,12 +85,23 @@ def fastpow(t, k, p):
     return res
 
 
-def pair_generator(leng):
-    p = get_prime_number(leng)
-    q = get_prime_number(leng)
-    return [p, q]
+def gener_sofi_seng_numb(leng):
+    while True:
+        tmp = get_prime_number(leng)
+        for _ in range(1, 1000):
+            if make_test(2 * tmp * _ + 1) == 1:
+                return tmp
+
+
+def gener_pq(leng):
+    return gener_sofi_seng_numb(leng), gener_sofi_seng_numb(leng // 2)
+
+
+def build_rsa(leng):
+    p, q = gener_pq(leng)
+    n, phi, e = p * q, (p - 1) * (q - 1), 2 ** 16 + 1
+    d = modinv(e, phi)
 
 
 if __name__ == "__main__":
-    q = pair_generator(256)
-    print(hex(q[0]))
+    build_rsa(256)

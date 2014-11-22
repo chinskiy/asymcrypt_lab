@@ -1,5 +1,4 @@
 import random
-import time
 import lab1.ps_rand_numb as gener
 
 
@@ -118,7 +117,7 @@ def check_rsa_encr_decr(par, mes):
     print('e ', str(hex(par['e']))[2:])
     print('d ', str(hex(par['d']))[2:])
     print('m ', str(hex(mes))[2:])
-    cr = encrypt_rsa(m, par['e'], par['n'])
+    cr = encrypt_rsa(mes, par['e'], par['n'])
     print('c', str(hex(cr))[2:])
     mes = decrypt_rsa(cr, par['d'], par['n'])
     print('m ', str(hex(mes))[2:])
@@ -166,12 +165,3 @@ def chech_protocol_conf_key_sending(a, b, k):
     print('s ', str(hex(s))[2:])
     k = check_rsa_sign(k, s, a['e'], a['n'])
     print('k ', str(hex(k))[2:])
-
-if __name__ == "__main__":
-    abon_a, abon_b = build_rsa(256), build_rsa(256)
-    if abon_a['p'] * abon_a['q'] > abon_b['p'] * abon_b['q']:
-        abon_a, abon_b = abon_b, abon_a
-    m = int(gener.BBSbyte().genseqbin(100), 2)
-    #check_rsa_encr_decr(abon_a, m)
-    #create_and_check_rsa_sign(abon_a, m)
-    chech_protocol_conf_key_sending(abon_a, abon_b, m)

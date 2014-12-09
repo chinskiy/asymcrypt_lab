@@ -1,7 +1,6 @@
 import random
 import lab1.ps_rand_numb as gener
 
-
 def gcd(a, b):
     while b:
         a, b = b, a % b
@@ -28,6 +27,7 @@ def get_prime_number(length):
     while True:
         numb = int(gener.BBSbyte().genseqbin(length), 2)
         if make_test(numb) == 0:
+            #print(str(hex(numb))[2:])
             continue
         return numb
 
@@ -67,7 +67,7 @@ def mil_rab_test(p, k):
 def make_test(numb):
     if test_trial_divisions(numb) == 0:
         return 0
-    if mil_rab_test(numb, 15) == 0:
+    if mil_rab_test(numb, 20) == 0:
         return 0
     return 1
 
@@ -165,3 +165,32 @@ def chech_protocol_conf_key_sending(a, b, k):
     print('s ', str(hex(s))[2:])
     k = check_rsa_sign(k, s, a['e'], a['n'])
     print('k ', str(hex(k))[2:])
+
+
+def protocol_rec_role(b):
+    print('eB ', str(hex(b['e']))[2:])
+    print('nB ', str(hex(b['n']))[2:])
+    k1 = int("0x" + input("Enter k1: "), 16)
+    s1 = int("0x" + input("Enter s1: "), 16)
+    eA = 65537
+    k = decrypt_rsa(k1, b['d'], b['n'])
+    s = decrypt_rsa(s1, b['d'], b['n'])
+    print('k ', str(hex(k))[2:])
+    print('s ', str(hex(s))[2:])
+    nA = int("0x" + input("Enter nA: "), 16)
+    k = check_rsa_sign(k, s, eA, nA)
+    print('k ', str(hex(k))[2:])
+
+
+def protocol_sender_role(a, k):
+    print('nA ', str(hex(a['n']))[2:])
+    print('eA ', str(hex(a['e']))[2:])
+    print('k ', str(hex(k)[2:]))
+    e1 = 65537
+    n1 = int("0x" + input("Enter nB: "), 16)
+    k1 = encrypt_rsa(k, e1, n1)
+    print('k1 ', str(hex(k1))[2:])
+    s = create_rsa_sign(k, a['d'], a['n'])
+    s1 = create_rsa_sign(s[1], e1, n1)
+    print('s ', str(hex(s[1]))[2:])
+    print('s1 ', str(hex(s1[1]))[2:])

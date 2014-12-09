@@ -105,11 +105,21 @@ class GeffeGen(Generator):
 
 class Librarian(Generator):
     def __init__(self):
-        self.f = open('hp.txt')
+        self.f = open('kjv.txt')
         self.f.seek(random.randint(1, 100000))
 
     def getnext(self):
         return ord(self.f.read(1)) % 256
+
+
+class Fibbon(Generator):
+    def __init__(self):
+        self.f0 = 0
+        self.f1 = 1
+
+    def getnext(self):
+        self.f0, self.f1 = self.f1, self.f0 + self.f1
+        return self.f0 % 2
 
 
 class BBSbit(Generator):
